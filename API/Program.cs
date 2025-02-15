@@ -15,23 +15,11 @@ builder.Services
     .AddRepresentation()
     .AddInfrastructure();
 
-// builder.Host.UseSerilog((context, Configuration) => Configuration
-    // .WriteTo.Debug()
-    // .MinimumLevel.Information());
-
-// builder.Host.UseSerilog((context, Configuration) => Configuration
-//     .ReadFrom.Configuration(context.Configuration));
-    
-// builder.Host.UseSerilog((context, configuration) => configuration
-//     .ReadFrom.Configuration(context.Configuration)
-//     .Enrich.FromLogContext()
-//     .WriteTo.Console()
-//     .WriteTo.File(new Serilog.Formatting.Json.JsonFormatter(), "Logs/log-.txt", rollingInterval: RollingInterval.Day));
-
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .WriteTo.File("Logs/Log.txt")
+    .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 
@@ -43,10 +31,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
-// app.UseSerilogRequestLogging();
-
 
 var summaries = new[]
 {
